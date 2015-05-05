@@ -9,6 +9,10 @@
             h1{
                 width: 100%;
             }
+            *{
+                margin: 0 !important;
+                
+            }
             input
             {
                 width: 100%;
@@ -35,19 +39,25 @@
 <body>
 <div class="container">
     <div class="row">
-      <div class="col-md-4"><h3>Current Hacker</h3></div>
-      <div class="col-md-4 form-group"><input type="text" id="user" class="form-control" placeholder="Username"/></div>
-      <div class="col-md-4"><h3>Hack time</h3></div>
-    </div>
-    <div class="row">
-      <div class="col-md-4" id="a"></div>
-      <div class="col-md-4"><button class="btn btn-danger btn-lg btn-block">Override</button></div>
-      <div class="col-md-4" id="b"></div>
-    </div>
-    <div class="row">
-      <div class="col-md-4"></div>
-      <div class="col-md-4"><ol id="leaderboard"></ol></div>
-      <div class="col-md-4"></div>
+      <div class="col-xs-6">
+        <h3>Current Hacker</h3>
+        <br/>
+        <div id="a"></div>
+      </div>
+      <div class="col-xs-6">
+        <h3>Hack time</h3>
+        <br/>
+        <div id="b"></div>
+      </div>
+      <div class="col-xs-12 form-group">
+        <button class="btn btn-danger btn-lg btn-block">Override</button>
+        <br/>
+        <input type="text" id="user" class="form-control" placeholder="Username"/>
+      </div>
+      <div class="col-xs-12">
+        <h3>Leaderboard</h3>
+        <ol id="leaderboard"></ol>
+      </div>
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -56,7 +66,7 @@
     var user;
     $(document).ready(function(){
         $.get("http://carl.teknikprogrammet.org/restful.php",function(data){
-            $("#a").append("<h1>"+data[0].user+"</h1>");
+            $("#a").append("<h2>"+data[0].user+"</h2>");
             /**Turn the database Timestamp into javascript's Date.*/
             var t = data[0].timestamp.split(/[- :]/);
             var d2 = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
@@ -74,10 +84,10 @@
                 time += doubleDigit(h)+":";
                 time += doubleDigit(m)+":";
                 time += doubleDigit(s);
-                $("#b").html("<h1>"+time+"</h1>");
+                $("#b").html("<h2>"+time+"</h2>");
               }, 1000);
             for (var i = 1; i < data.length; i++) {
-                $("#leaderboard").append("<li>"+data[i].user+" - "+data[i].score+"</li>");
+                $("#leaderboard").append("<li>"+data[i].user+" - "+data[i].score+"GB</li>");
             }
         });
     });
@@ -86,7 +96,6 @@
         user = $("#user").val();
         if (user == undefined || user.length < 3 || user.length > 16) {
             $(".form-group").addClass("has-error");
-            $("#user").effect("bounce","slow");
         }
         else
         {
