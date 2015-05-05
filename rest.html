@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html lang=en>
+<head>
+    <meta charset="utf-8" />
+    <title>Rest</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <style>
+            h1{
+                width: 100%;
+            }
+            input
+            {
+                width: 100%;
+            }
+            html, body
+            {
+                height: 100%;
+            }
+            .container
+            {
+                text-align: center;
+            }
+            input, button
+            {
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+            .has-error .form-control{
+                background-color: rgb(255,200,200);
+            }
+        </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="row">
+      <div class="col-md-4"><h3>Current Hacker</h3></div>
+      <div class="col-md-4 form-group"><input type="text" id="user" class="form-control" placeholder="Username"/></div>
+      <div class="col-md-4"><h3>Hack time</h3></div>
+    </div>
+    <div class="row">
+      <div class="col-md-4" id="a"></div>
+      <div class="col-md-4"><button class="btn btn-danger btn-lg btn-block">Override</button></div>
+      <div class="col-md-4" id="b"></div>
+    </div>
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4"><ol id="leaderboard"></ol></div>
+      <div class="col-md-4"></div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script>
+    var user;
+    $(document).ready(function(){
+        $.get("http://carl.teknikprogrammet.org/restful.php",function(data){
+            $("#a").append("<h1>"+data[0].user+"</h1>");
+            /**Turn the database Timestamp into javascript's Date.*/
+            var t = data[0].timestamp.split(/[- :]/);
+            var d2 = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
+            /**Setup for the clock*/
+            var clock = window.setInterval(function(){
+                /**Calculate the difference in time in seconds*/
+                var dt = Math.floor(Math.abs(new Date()-d2)/1000);
+                /**Hours*/
+                var h = Math.floor(dt / 3600);
+                /**Remove the hours from the time to get minutes.*/
+                var m = Math.floor((dt-h*3600) / 60);
+                /**Get the remaining seconds by removing what we already got.*/
+                var s = Math.floor((dt-m*60-h*3600));
+                var time = "";
+                time += doubleDigit(h)+":";
+                time += doubleDigit(m)+":";
+                time += doubleDigit(s);
+                $("#b").html("<h1>"+time+"</h1>");
+              }, 1000);
+            for (var i = 1; i < data.length; i++) {
+                $("#leaderboard").append("<li>"+data[i].user+" - "+data[i].score+"</li>");
+            }
+        });
+    });
+    /**Takes the username and checks for errors, sends it to the database if it's fine*/
+    $("button").click(function(){
+        user = $("#user").val();
+        if (user == undefined || user.length < 3 || user.length > 16) {
+            $(".form-group").addClass("has-error");
+            $("#user").effect("bounce","slow");
+        }
+        else
+        {
+            var data = '{"user":"'+user+'"}';
+            $.post("http://carl.teknikprogrammet.org/restful.php", data, function(d){if(d)location.reload();},"text");
+        }
+    });
+    /**Makes any number below 10 use up two digits isntead of one.*/
+    function doubleDigit(p) {
+        if (p < 10)
+            return "0"+p;
+        else
+            return p;
+    }
+</script>
+
+</body>
+</html>
