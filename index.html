@@ -11,7 +11,6 @@
             }
             *{
                 margin: 0 !important;
-                
             }
             input
             {
@@ -91,16 +90,17 @@
             }
         });
     });
-    /**Takes the username and checks for errors, sends it to the database if it's fine*/
+    /**Takes the username and checks length and contents, sends it to the database if it's fine*/
     $("button").click(function(){
         user = $("#user").val();
-        if (user == undefined || user.length < 3 || user.length > 16) {
+        var letters = /^[0-9a-zA-Z]+$/;
+        if (user == undefined || user.length < 3 || user.length > 16 || !/^[a-z]+$/i.test(user)) {
             $(".form-group").addClass("has-error");
         }
         else
         {
-            var data = '{"user":"'+user+'"}';
-            $.post("http://carl.teknikprogrammet.org/restful.php", data, function(d){if(d)location.reload();},"text");
+            //var data = '{"user":"'+user+'"}';
+            //$.post("http://carl.teknikprogrammet.org/restful.php", data, function(d){if(d)location.reload();},"text");
         }
     });
     /**Makes any number below 10 use up two digits isntead of one.*/
