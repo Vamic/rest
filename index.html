@@ -99,8 +99,8 @@
         }
         else
         {
-            //var data = '{"user":"'+user+'"}';
-            //$.post("http://carl.teknikprogrammet.org/restful.php", data, function(d){if(d)location.reload();},"text");
+            var data = '{"user":"'+user+'"}';
+            $.post("http://carl.teknikprogrammet.org/restful.php", data, function(d){if(d)location.reload();},"text");
         }
     });
     /**Makes any number below 10 use up two digits isntead of one.*/
