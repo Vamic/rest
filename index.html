@@ -39,12 +39,14 @@
 <div class="container">
     <div class="row">
       <div class="col-xs-6">
-        <h3>Current Hacker</h3>
+        <h3>Current</h3>
+        <h3>Hacker</h3>
         <br/>
         <div id="a"></div>
       </div>
       <div class="col-xs-6">
-        <h3>Hack time</h3>
+        <h3>Hack</h3>
+        <h3>time</h3>
         <br/>
         <div id="b"></div>
       </div>
@@ -65,7 +67,7 @@
     var user;
     $(document).ready(function(){
         $.get("http://carl.teknikprogrammet.org/restful.php",function(data){
-            $("#a").append("<h2>"+data[0].user+"</h2>");
+            $("#a").append("<h4>"+data[0].user+"</h4>");
             /**Turn the database Timestamp into javascript's Date.*/
             var t = data[0].timestamp.split(/[- :]/);
             var d2 = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
@@ -83,7 +85,7 @@
                 time += doubleDigit(h)+":";
                 time += doubleDigit(m)+":";
                 time += doubleDigit(s);
-                $("#b").html("<h2>"+time+"</h2>");
+                $("#b").html("<h4>"+time+"</h4>");
               }, 1000);
             for (var i = 1; i < data.length; i++) {
                 $("#leaderboard").append("<li>"+data[i].user+" - "+data[i].score+"GB</li>");
